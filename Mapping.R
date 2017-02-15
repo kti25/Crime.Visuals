@@ -1,4 +1,4 @@
-df<-read.table("C:/Users/Kevin Rossi/Desktop/Important Docs/Old Documents/Crime Project/NEW_seattle.csv", header = TRUE, sep = ",")
+df<-read.table("C:/Desktop/NEW_seattle.csv", header = TRUE, sep = ",")
 names(df)
 #take samples of the seattle2 data for the heat map of all of the years
 library(sampling)
@@ -49,7 +49,7 @@ heatn
 #
 #############################################################################################
 library(leaflet)
-TopoData <- readLines("C:/Users/Kevin Rossi/Desktop/Important Docs/Old Documents/Crime Project/census.geojson") %>% paste(collapse = "\n")
+TopoData <- readLines("C:/Desktop/census.geojson") %>% paste(collapse = "\n")
 
 CensusMapAll <- leaflet(df) %>% 
   addProviderTiles("Stamen.TonerLite", group = "Toner Lite")%>%
@@ -91,40 +91,3 @@ CensusMapNon <- leaflet(violent_crime) %>%
   )
 CensusMapNon
 
-#################################################################################################
-#
-#  Does not work on regular R, not quite sure what this does
-#
-#################################################################################################
-
-tf = 'mymap.html'
-htmlwidgets::saveWidget(m, file = tf, selfcontained = F)
-IRdisplay::display_html(paste("<iframe height=500 width=800 src=' ", tf, " ' ","/>"))
-
-TopoData <- readLines("C:/Users/Kevin Rossi/Desktop/Crime Project/census.geojson") %>% paste(collapse = "\n")
-
-m <- leaflet(df) %>% 
-addProviderTiles("CartoDB.Positron", group='Prettier Tiles') %>%  
-setView(lng = -122.335167, lat = 47.608013, zoom = 9) %>%
-  addCircles(~Longitude, ~Latitude, ~Ward**2, stroke = F, group = "Crime")
-
-
-tf = 'my_leaflet_map.html'
-htmlwidgets::saveWidget(m, file = tf, selfcontained = F)
-IRdisplay::display_html(paste("<iframe height=500 width=800 src=' ", tf, " ' ","/>"))
-
-select(df, Primary.Type) %>% distinct()
-
-#############################################################
-# Bar Plot
-#############################################################
-cluster<-read.table("C:/Users/Kevin Rossi/Desktop/Crime Project/cluster.csv", header = TRUE, sep = ",")
-counts2011 <- table(cluster$cluster_2011)
-y<-barplot(counts2011, main="Cluster Distribution 2011", col=c(heat.colors(8)),
-        xlab="Cluster Number", ylab="Community Count", ylim=c(0, 40)) 
-
-counts2015 <- table(cluster$cluster_2015)
-x<-barplot(counts2015, main="Cluster Distribution 2015", col=c(heat.colors(8)),
-      xlab="Cluster Number", ylab="Community Area Count", ylim=c(0, 30))
-text(x, 0, round(counts2015, 1),cex=1,pos=3) 
-text(y, 0, round(counts2011, 1),cex=1,pos=3) 
